@@ -1,17 +1,13 @@
 import "./App.css";
-import React from 'react' //state yi kllanmak için import ettik
+import React from 'react'
 function Arama({aramaMetni,onSearch}){
 
-    //arama çubuğunun çalışmasını sağlıyıcağız
-    //input ile ne zaman etkileşim yapsak etki etsin gibi bağlantı yapmasak çalışmazdı (onChange={handleChange})
     function handleChange(event){
-        //console.log(event);
-        //console.log(event.target.value);
         props.onSearch(event);
     }
 
     //handleChange arama metnini güncelliyor
-    return(//kapsayıcı birleşen olmadan bir birleşen oluşturamayız(div) // ONCHANGE ARAMA YAPMAMIZI SAĞLIYOR
+    return(
         <div>
             <label htmlFor="arama">Ara: </label>
             <input id="arama" type="text" onChange={onSearch} value={aramaMetni} />
@@ -33,14 +29,10 @@ function Yazi({id,url,baslik,yazar,yorum_sayisi,puan}){
         </li>
     )
 }
-//yani bir birleşen oluşturucaz
-// PROPS TANIMI ÇIKABİLİR
+
 function Liste(props){
-    //PROPS ÖNEMLİ= VERİ İLETİŞİMİ İÇİN PROPS(VERİ DEĞİŞİMİ İÇİN=STATE)
-    //props tanımlıyoruz(Liste içindeki ile buradaki isim aynı olmalı)
+    
     return(
-        //dönecek bütün elemanlar burada ekranda görünütlenecek
-        // liste oluşturmak için(ul) kullanılıyor
         <ul>
             { props.yazilar.map(function(yazi){
                 return(
@@ -51,12 +43,8 @@ function Liste(props){
         </ul>
     )
 }
-function App() {//kök birleşen App tir
-    //state yazıcaz dizi şeklinde tanımlanır (React.useState= ilk değeri atadık)
+function App() 
     const[aramaMetni,setAramaMetni]=React.useState(localStorage.getItem("aranan") || "");
-    //LİFTİNG STATE YAPTIK BUNU
-    //LİFTİNG STATE KURALI ÖNEMLİ
-    //aRAMADAN VERİYİ ALIP FİLTRELİYİP GERİDEN ARAMAYA ATICAZ
     const yaziListesi = [
         {
             baslik: "React Öğreniyorum",
@@ -140,35 +128,23 @@ function App() {//kök birleşen App tir
         },
     ];
 
-    //filter(filtrelememizi sağlıyor)
-    //includes(bir stact içerisinde var mı)
-    //Burada dizi filtreledik(AŞAĞIDA LİSTEDE ARAMA YAPTIK)
     const arananYazilar=yaziListesi.filter(
         function(yazi){
             return yazi.baslik.toLocaleLowerCase().includes(aramaMetni.toLocaleLowerCase()) || yazi.yazar.toLocaleUpperCase().includes(aramaMetni.toLocaleUpperCase())
         }
     );
 
-//STATE NİN ANLAMI SINAVDA GELEBİLİR
-    //state değiştiğinde yeniden render edilir
-    //handle search fonksiyonunu tanımladık
-    //1.Aşama Callback metodu oluşturma
-
     function handleSearch(event) {
         setAramaMetni(event.target.value);
-        //localStorage.setItem("aranan",event.target.value);
+    
     }
 
     React.useEffect(() => {
         localStorage.setItem("aranan",aramaMetni)
     }, [aramaMetni])
 
-    //props a metodda geçırebiliyoruz(handleSearch)
 
     return (
-        //amaç bunun(App içerisinde) içerisindeki kodu azaltmak
-        //listeyi çağırdık
-        //Liste içerisine props tanımlamaya çalışıyoruz
         <div>
             <h1>Yazılar</h1>
             <Arama aramaMetni = {aramaMetni} onSearch = {handleSearch}/>
@@ -182,7 +158,3 @@ function App() {//kök birleşen App tir
     );
 }
 export default App;
-
-// state nedir props nedir
-// state= bir birleşenin durumudur
-// props= bir birleşenin özellikleridir
